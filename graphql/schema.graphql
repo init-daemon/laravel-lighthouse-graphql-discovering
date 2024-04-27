@@ -1,16 +1,28 @@
 type Query {
     users: [User] @paginate
-    user(num: String @eq): User @find
+    user(num: numEnum @eq, id: ID @eq): User @find
+}
+
+type Mutation {
+    createUser(
+        name: String!
+        num: numEnum!
+        email: String!
+        password: String!
+    ): User! @create
 }
 
 enum numEnum {
     ONE @enum(value: 1)
     TWO @enum(value: 2)
     THREE @enum(value: 3)
+    FOUR @enum(value: 4)
 }
 
 type User {
     id: String
-    email: String
+    name: String
     num: numEnum
+    email: String
+    password: String
 }

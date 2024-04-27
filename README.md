@@ -289,3 +289,35 @@ requete: first est utiliser pour definir le nombre de résultat et page pour la 
   }
 }
 ```
+
+## creation d'utilisateur
+
+```.graphql
+//.....
+type Mutation {
+    createUser(
+        name: String!
+        num: numEnum!
+        email: String!
+        password: String!
+    ): User! @create
+}
+//.....
+```
+
+```request
+mutation {
+  createUser(
+    name: "user",
+    num: ONE,
+    email: "user@host.com",
+    password: "password"
+  ) {
+    name
+    num
+    email
+    password
+  }
+}
+
+```
