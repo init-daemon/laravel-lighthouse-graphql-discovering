@@ -10,6 +10,14 @@ type Mutation {
         email: String!
         password: String!
     ): User! @create
+
+    updateUser(
+        id: ID!
+        name: String
+        num: numEnum
+        email: String
+        password: String
+    ): User! @update
 }
 
 enum numEnum {

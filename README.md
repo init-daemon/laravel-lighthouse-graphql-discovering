@@ -290,7 +290,7 @@ requete: first est utiliser pour definir le nombre de résultat et page pour la 
 }
 ```
 
-## creation d'utilisateur
+## Mutation: creation d'utilisateur
 
 ```.graphql
 //.....
@@ -320,4 +320,37 @@ mutation {
   }
 }
 
+```
+
+## Mutation: mettre à jour
+
+-   meme que creation mais
+    -   utiliser `@udpate` à place de `@create`
+    -   id est requis
+    -   mettre les autres champs optionnel
+    -   utilise updateUser pour user
+
+```graphql
+type Mutation {
+    updateUser(
+        id: ID!
+        name: String
+        num: numEnum
+        email: String
+        password: String
+    ): User! @update
+}
+```
+
+```request
+mutation {
+  updateUser(
+    id: 22
+    name: "Twenty two"
+  ) {
+    id
+    name
+    num
+  }
+}
 ```
