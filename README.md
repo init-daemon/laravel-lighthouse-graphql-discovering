@@ -449,3 +449,19 @@ type Post {
   }
 }
 ```
+
+## Règle de validation
+
+-   utilisation de @rules pour les paramètres
+
+```graphql
+type Mutation {
+    updateUser(
+        id: ID!
+        name: String @rules(apply: ["min:3"])
+        num: numEnum @rules(apply: ["in:1,2,3,4"])
+        email: String @rules(apply: ["email"])
+        password: String @rules(apply: ["min:8"])
+    ): User! @update
+}
+```
