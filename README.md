@@ -354,3 +354,37 @@ mutation {
   }
 }
 ```
+
+## Mutation: suppression
+
+-   meme que update mais
+    -   utilise `@delete` au lieu de `@update`
+    -   préciser les elements à supprimer dans le paramètre
+
+### supprimer un utilisateur
+
+```graphql
+type Mutation {
+    deleteUser(id: ID! @whereKey): User! @delete
+}
+```
+
+```request
+deleteUser(id: 1) {
+    name
+}
+```
+
+### supprimer des utilisateurs
+
+```graphql
+type Mutation {
+    deleteUsers(ids: [ID!] @whereKey): [User!]! @delete
+}
+```
+
+```request
+deleteUsers(ids: [2,3]) {
+    name
+}
+```

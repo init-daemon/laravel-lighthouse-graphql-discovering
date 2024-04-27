@@ -18,6 +18,10 @@ type Mutation {
         email: String
         password: String
     ): User! @update
+
+    deleteUser(id: ID! @whereKey): User @delete
+
+    deleteUsers(ids: [ID!] @whereKey): [User]! @delete
 }
 
 enum numEnum {
