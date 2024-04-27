@@ -198,3 +198,94 @@ type Mutation {
 ### mutation
 
 ### subscription
+
+## récupération des données
+
+### Collection d'element
+
+```graphql graphql/schema.graphql
+type Query {
+    users: [User] @all //récupération de toute les utilisateurs//mais un ou plusieurs utilisateurs peut être null dans la collection (peut etre [null, {...user1}]) et que la reponse elle même aussi peut être null (null)
+    //si Users: [User]! @all //la reponse ne doit pas être null(reponse null) mais les elements dans la collection peuvent l'etre (peut être [null, {...user1}])
+    //si Users: [User!]! @all //la response doit strictement être une collection de type User(la reponse ne doit pas être null ni contenir des elements null)
+}
+
+type User { //here we can define all field we want to get
+    id!: String //! doit contenir une valeur sinon erreur
+    email!: String //! doit contenir une valeur sinon erreur
+    email_verified_at: String //n'est pas obligatoire
+}
+```
+
+### Un element
+
+-   `@find` permet de preciser qu'on ne veut récupérer qu'un element en utilisant le paramètre(ici id: ID @eq)
+-   `@eq` directive opérateur equal
+
+```graphql
+type Query {
+    users: [User] @all
+    user(id: ID @eq): User @find
+}
+
+enum numEnum {
+    ONE @enum(value: 1)
+    TWO @enum(value: 2)
+    THREE @enum(value: 3)
+}
+
+type User {
+    id: String
+    email: String
+    num: numEnum
+}
+```
+
+## pagination
+
+-   utilisation de la directive `@paginate`
+-   basiquement, voici l'usage:
+
+```graphiql
+type Query {
+    users: [User] @paginate
+    user(num: String @eq): User @find
+}
+```
+
+requete: first est utiliser pour definir le nombre de résultat et page pour la page courant
+
+```graphql
+{
+  users(first: 3, page: 5){#first and page parameters are required
+    data {#required
+      id
+    },
+    paginatorInfo{#optional response, paginate info we can get
+        "Number of items in the current page."
+        count # type Int!
+
+        "Index of the current page."
+        currentPage # type Int!
+
+        "Index of the first item in the current page."
+        firstItem # type Int
+
+        "Are there more pages after this one?"
+        hasMorePages # type Boolean!
+
+        "Index of the last item in the current page."
+        lastItem # type Int
+
+        "Index of the last available page."
+        lastPage # type Int!
+
+        "Number of items per page."
+        perPage # type Int!
+
+        "Number of total available items."
+        total # type Int!
+    }
+  }
+}
+```

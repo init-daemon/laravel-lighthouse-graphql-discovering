@@ -19,5 +19,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        for($i=0; $i<20; $i++) {
+            User::factory()->create([
+                "num"=>mt_rand(1,3)
+            ]);
+        }
     }
 }

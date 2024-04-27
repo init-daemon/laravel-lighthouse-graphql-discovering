@@ -1,0 +1,16 @@
+type Query {
+    users: [User] @paginate
+    user(num: String @eq): User @find
+}
+
+enum numEnum {
+    ONE @enum(value: 1)
+    TWO @enum(value: 2)
+    THREE @enum(value: 3)
+}
+
+type User {
+    id: String
+    email: String
+    num: numEnum
+}
