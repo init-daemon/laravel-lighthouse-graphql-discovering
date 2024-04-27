@@ -388,3 +388,64 @@ deleteUsers(ids: [2,3]) {
     name
 }
 ```
+
+## recupération des elements en relation avec User
+
+-   utilisation des directives de relation(`@hasMany`, `@belongsTo`)
+
+```php
+//app/Model/Post.php
+//...
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+//...
+```
+
+```php
+//app/Model/User.php
+//...
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+//...
+```
+
+```graphql
+type User {
+    id: String
+    name: String
+    num: numEnum
+    email: String
+    posts: [Post!] @hasMany
+}
+
+type Post {
+    user_id: Int
+    title: String
+    content: String
+    user: User @belongsTo
+}
+```
+
+```request
+{
+  users(first: 5, page: 5){
+    data {
+      id
+      name
+      posts {
+        title
+        content
+      }
+    },
+    paginatorInfo{
+      firstItem
+      currentPage
+      hasMorePages
+    }
+  }
+}
+```

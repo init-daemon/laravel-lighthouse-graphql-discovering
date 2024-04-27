@@ -36,5 +36,12 @@ type User {
     name: String
     num: numEnum
     email: String
-    password: String
+    posts: [Post!] @hasMany
+}
+
+type Post {
+    user_id: Int
+    title: String
+    content: String
+    user: User @belongsTo
 }
