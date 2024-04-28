@@ -1,0 +1,11 @@
+type Query {
+    post(id: ID @eq): Post @find
+    posts: [Post] @paginate
+}
+
+type Post {
+    user_id: Int
+    title: String
+    content: String
+    user: User @belongsTo
+}

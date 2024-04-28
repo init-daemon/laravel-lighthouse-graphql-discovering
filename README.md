@@ -465,3 +465,46 @@ type Mutation {
     ): User! @update
 }
 ```
+
+## Separer les schemas des modèles
+
+-   utilisation de `#import [path_to_schema]`
+-   utiliser du mot clé `extends` devant `type Query` (`extend type Query`) pour les query pour eviter d'écraser les autres queries
+-   il est recommandé de séparer les schemas des modèles dans des fichiers différents
+-   mettre l'importation à la fin du fichier pour ne pas ecraser les autres declaration
+-   exemple:
+
+```graphql
+"/graphql/user.graphql"
+extend type Query {
+}
+
+extend type Mutation {
+}
+
+type User {
+}
+
+enum numEnum {
+}
+
+```
+
+```graphql
+"/graphql/post.graphql"
+extend type Query {
+}
+
+extend type Mutation {
+}
+
+type Post {
+}
+
+```
+
+```graphql
+"/graphql/schema.graphql"
+#import post.graphql
+#import user.graphql
+```
