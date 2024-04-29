@@ -1,6 +1,10 @@
--   `composer install`
+-   installation de laravel
+-   `composer require laravel/octane`
 -   `php artisan octane:install --server=frankenphp`
 -   `php artisan octane:start`
+-   `php artisan vendor:publish --tag=lighthouse-schema`
+-   `php artisan lighthouse:ide-helper`
+-   `composer require mll-lab/laravel-graphiql`
 
 # GraphQL : Laravel lighthouse
 
@@ -513,6 +517,22 @@ type Post {
 
 -   `php artisan lighthouse:mutation login`
 -   un fichier `/app/GraphQL/Mutations/Login.php` est créé
+-   configurer d'abord `config/sanctum.php` pour ajouter la durée du token:
+
+```php
+// config/sanctum.php
+//..
+/**
+ * |--------------------------------------------------------------------------
+ * | Expiration Minutes
+ * |--------------------------------------------------------------------------
+ * |
+ */
+//...
+    'ac_expiration' => 60,              // One hour
+//...
+
+```
 
 ```php
 //..
@@ -527,9 +547,52 @@ type Post {
                 'password' => ['The provided credentials are incorrect.'],
             ]);
         }
-        return $user->createToken('access_token')->plainTextToken;
+        return $user->createToken(
+            'access_token',
+            [TokenAbility::ALL->value],
+            Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
+        )->plainTextToken;
     }
 //..
 ```
 
-## authentification
+## [authentification](https://lighthouse-php.com/6/security/authentication.html)
+
+-   assurez vous d'avoir publier lighthouse configuration en vérifiant dans `config/sanctum.php` sinon `php artisan vendor:publish --tag=lighthouse-config`, et ajoute la configuration qui suit
+
+-   comme on utilise laravel sanctum:
+
+```php
+//config/lighthouse.php
+    // ...
+'route' => [
+    // ...
+    'middleware' => [
+        \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+
+        // ... other middleware
+    ],
+],
+'guards' => ['sanctum'],
+    // ...
+```
+
+-   `@guard` pour verification de l'authentification en utilisant le guard par défaut configuré
+-   `@auth` permet de récupérer l'information sur l'utilisateur authetifié
+
+```graphql
+//graphql/auth.graphql
+extend type Query {
+    me: User @guard @auth
+}
+```
+
+-   normalement ca devrait marcher
+
+```request
+{
+	me {
+    name
+  }
+}
+```

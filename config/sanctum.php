@@ -45,8 +45,11 @@ return [
     | "expires_at" attribute, but first-party sessions are not affected.
     |
     */
+    
+    'expiration' => 480,
+    'ac_expiration' => 60,              // One hour
+    'rt_expiration' => 7 * 24 * 60,  // 7 Days
 
-    'expiration' => null,
 
     /*
     |--------------------------------------------------------------------------
