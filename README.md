@@ -508,3 +508,28 @@ type Post {
 #import post.graphql
 #import user.graphql
 ```
+
+## Mutation personnalisé pour le login
+
+-   `php artisan lighthouse:mutation login`
+-   un fichier `/app/GraphQL/Mutations/Login.php` est créé
+
+```php
+//..
+    /** @param  array{}  $args */
+    public function __invoke(null $_, array $args)
+    {
+        $user = User::where('email', $args['email'])->first();
+
+        if (! $user || ! Hash::check($args['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+                'password' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+        return $user->createToken('access_token')->plainTextToken;
+    }
+//..
+```
+
+## authentification
