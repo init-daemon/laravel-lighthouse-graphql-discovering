@@ -21,7 +21,7 @@ final readonly class Login
         }
         return $user->createToken(
             'access_token', 
-            [TokenAbility::LOGGED_IN_AS_USER->value], 
+            [TokenAbility::ALL->value], 
             Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
         )->plainTextToken;
     }
